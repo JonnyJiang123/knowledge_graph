@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit: add PRD and CLAUDE.md\n\n- 知识图谱prd.md: MVP product requirements for knowledge graph platform\n- CLAUDE.md: project guidance for Claude Code\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git remote add:*)",
+      "Bash(git checkout:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(Get-ChildItem -Path \"f:\\\\vscodeProjects\\\\ai\\\\knowledge_graph\" -Recurse -Force)",
+      "Bash(Select-Object FullName, Mode, Length)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: add architecture design document\n\n- Pragmatic Hexagonal architecture with clear module boundaries\n- Hybrid sync/async NLP processing \\(Celery + Redis\\)\n- Vue 3 + Pinia frontend, FastAPI backend\n- Neo4j for graph storage, MySQL for relational data\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\ndocs: add Phase 1 implementation plan\n\n13 detailed tasks covering:\n- Backend scaffolding \\(FastAPI + Hexagonal\\)\n- Docker infrastructure \\(MySQL, Neo4j, Redis\\)\n- Database setup with Alembic\n- Domain entities and repository ports\n- Repository implementations\n- JWT authentication system\n- Project CRUD API\n- Frontend scaffolding \\(Vue 3 + Vite\\)\n- API client and Pinia stores\n- Auth pages and routing\n- Project management pages\n- Integration tests\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git worktree:*)",
+      "Bash(New-Item -ItemType Directory -Force -Path backend/src/domain/entities, backend/src/domain/value_objects, backend/src/domain/services, backend/src/domain/ports, backend/src/application/commands, backend/src/application/queries, backend/src/application/services, backend/src/infrastructure/persistence/neo4j, backend/src/infrastructure/persistence/mysql, backend/src/infrastructure/queue, backend/src/infrastructure/storage, backend/src/api/routers, backend/src/api/schemas, backend/src/api/middleware, backend/src/api/dependencies, backend/tests/unit/domain, backend/tests/unit/application, backend/tests/integration, backend/tests/e2e)",
+      "Bash(Select-Object -Property FullName)",
+      "Bash(python -m venv:*)",
+      "Bash(source venv/Scripts/activate)",
+      "Bash(pip install:*)",
+      "Bash(timeout 5 uvicorn:*)",
+      "Bash(git commit:*)",
+      "Bash(docker:*)",
+      "Bash(alembic init:*)",
+      "Bash(node --version:*)",
+      "Bash(npm:*)",
+      "Bash(git stash:*)",
+      "Bash(git merge:*)"
+    ]
+  }
+}
