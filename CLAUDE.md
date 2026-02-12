@@ -66,3 +66,9 @@ Based on 8-core 16GB RAM, ≤1M entities, ≤5M relations:
 - Symptom-disease-department matching
 - Drug interaction queries (contraindications per pharmacopeia)
 - Medical record logic validation
+
+# language
+All code comments should be in Simplified Chinese
+
+# environment
+The current system is windows11. Any command execution must be carried out in accordance with the powershell specification, and at the same time, garbled text output in the command line should be avoided
