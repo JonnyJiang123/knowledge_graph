@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    container_name: kg-backend
+    env_file:
+      - .env
+    environment:
+      REDIS_URI: ${REDIS_URI:-redis://kg-redis:6379/0}
+    ports:
+      - "8000:8000"
+    working_dir: /app/backend
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - ../backend:/app/backend
+      - uploads_data:/app/backend/storage/uploads
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:8.0
+    container_name: kg-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: knowledge_graph
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  neo4j:
+    image: neo4j:5-community
+    container_name: kg-neo4j
+    environment:
+      NEO4J_AUTH: neo4j/password
+      NEO4J_PLUGINS: '["apoc"]'
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7474"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: kg-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  worker:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    container_name: kg-worker
+    env_file:
+      - .env
+    environment:
+      REDIS_URI: ${REDIS_URI:-redis://kg-redis:6379/0}
+    working_dir: /app/backend
+    command: celery -A src.infrastructure.queue.celery_app.celery_app worker -Q ingestion -l info
+    volumes:
+      - ../backend:/app/backend
+      - uploads_data:/app/backend/storage/uploads
+    depends_on:
+      redis:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+  neo4j_data:
+  redis_data:
+  uploads_data:
