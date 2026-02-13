@@ -83,6 +83,11 @@ async def test_async_file_exceeds_threshold(service, mocker):
     assert result.mode == ProcessingMode.ASYNC
     assert result.job.status == JobStatus.PENDING
     service.task_queue.enqueue.assert_awaited_once()
+    task_name, payload = service.task_queue.enqueue.await_args.args
+    assert task_name == "ingestion.run_async_job"
+    assert payload["project_id"] == "proj-2"
+    assert payload["file_format"] == FileFormat.CSV.value
+    assert payload["rules"] == []
 
 
 @pytest.mark.asyncio
