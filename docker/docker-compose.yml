@@ -51,3 +51,4 @@ volumes:
   mysql_data:
   neo4j_data:
   redis_data:
+  uploads_data:
