@@ -6,6 +6,8 @@ import {
   Folder,
   Setting,
   SwitchButton,
+  Upload,
+  List,
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -39,6 +41,20 @@ function handleLogout() {
           <el-icon><Folder /></el-icon>
           <span>项目管理</span>
         </el-menu-item>
+        <el-sub-menu index="/ingestion">
+          <template #title>
+            <el-icon><Upload /></el-icon>
+            <span>数据导入</span>
+          </template>
+          <el-menu-item index="/ingestion/wizard">
+            <el-icon><Upload /></el-icon>
+            <span>导入向导</span>
+          </el-menu-item>
+          <el-menu-item index="/ingestion/jobs">
+            <el-icon><List /></el-icon>
+            <span>任务列表</span>
+          </el-menu-item>
+        </el-sub-menu>
         <el-menu-item index="/settings" v-if="authStore.isSuperuser">
           <el-icon><Setting /></el-icon>
           <span>系统设置</span>

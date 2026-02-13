@@ -34,6 +34,16 @@ const routes: RouteRecordRaw[] = [
         name: 'ProjectDetail',
         component: () => import('@/pages/projects/ProjectDetail.vue'),
       },
+      {
+        path: 'ingestion/wizard',
+        name: 'IngestionWizard',
+        component: () => import('@/pages/ingestion/IngestionWizard.vue'),
+      },
+      {
+        path: 'ingestion/jobs',
+        name: 'IngestionJobs',
+        component: () => import('@/pages/ingestion/JobList.vue'),
+      },
     ],
   },
 ]
