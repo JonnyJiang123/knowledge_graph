@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 from typing import Annotated
 
@@ -25,6 +26,8 @@ from src.infrastructure.persistence.mysql.repositories.data_source_repository im
 from src.infrastructure.persistence.mysql.repositories.ingestion_job_repository import (
     MySQLIngestionJobRepository,
 )
+from src.infrastructure.queue.celery_app import celery_app
+from src.infrastructure.queue.celery_queue import CeleryTaskQueue
 from src.infrastructure.queue.local_queue import LocalTaskQueue
 from src.infrastructure.storage.local_storage import LocalFileStorage
 
@@ -34,9 +37,14 @@ def _preview_cache() -> PreviewCachePort:
     return InMemoryPreviewCache()
 
 
+USE_LOCAL_QUEUE = os.getenv("KG_USE_LOCAL_QUEUE", "").lower() in {"1", "true", "yes"}
+
+
 @lru_cache(maxsize=1)
 def _task_queue() -> TaskQueuePort:
-    return LocalTaskQueue()
+    if USE_LOCAL_QUEUE:
+        return LocalTaskQueue()
+    return CeleryTaskQueue(celery_app)
 
 
 async def get_preview_cache() -> PreviewCachePort:

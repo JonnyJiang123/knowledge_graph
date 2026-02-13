@@ -3,7 +3,7 @@ from __future__ import annotations
 import io
 import inspect
 import json
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Awaitable, Callable, Iterable, Sequence
 from uuid import uuid4
@@ -111,7 +111,13 @@ class IngestionService:
         if mode == ProcessingMode.ASYNC:
             await self.task_queue.enqueue(
                 "ingestion.run_async_job",
-                {"job_id": stored_job.id, "project_id": project_id},
+                self._build_async_payload(
+                    job_id=stored_job.id,
+                    project_id=project_id,
+                    artifact=artifact,
+                    total_rows=row_count,
+                    rules=rules,
+                ),
             )
 
         return UploadResult(
@@ -157,7 +163,13 @@ class IngestionService:
         if mode == ProcessingMode.ASYNC:
             await self.task_queue.enqueue(
                 "ingestion.run_async_job",
-                {"job_id": stored_job.id, "project_id": project_id},
+                self._build_async_payload(
+                    job_id=stored_job.id,
+                    project_id=project_id,
+                    artifact=artifact,
+                    total_rows=total_rows,
+                    rules=rules,
+                ),
             )
 
         return UploadResult(
@@ -307,3 +319,22 @@ class IngestionService:
         else:
             dataframe, total_rows = result  # type: ignore[assignment]
         return dataframe, int(total_rows)
+
+    def _build_async_payload(
+        self,
+        *,
+        job_id: str,
+        project_id: str,
+        artifact: FileArtifact,
+        total_rows: int,
+        rules: Sequence[CleaningRule],
+    ) -> dict[str, Any]:
+        return {
+            "job_id": job_id,
+            "project_id": project_id,
+            "artifact_id": artifact.artifact_id,
+            "artifact_path": artifact.stored_path,
+            "file_format": artifact.file_format.value,
+            "total_rows": total_rows,
+            "rules": [asdict(rule) for rule in rules],
+        }
