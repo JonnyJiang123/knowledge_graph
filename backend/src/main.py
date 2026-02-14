@@ -3,15 +3,18 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.api.routers import auth, graph, projects, ingestion
 from src.config import settings
-from src.api.routers import auth, projects, ingestion
+from src.infrastructure.persistence.neo4j.client import Neo4jClient
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # 启动时执行
-    yield
-    # 关闭时执行
+    await Neo4jClient.connect()
+    try:
+        yield
+    finally:
+        await Neo4jClient.disconnect()
 
 
 app = FastAPI(
@@ -30,9 +33,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 路由注册
+# 璺敱娉ㄥ唽
 app.include_router(auth.router)
 app.include_router(projects.router)
+app.include_router(projects.graph_router)
+app.include_router(graph.router)
 app.include_router(ingestion.router)
 
 

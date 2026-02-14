@@ -1,3 +1,3 @@
-from . import auth, projects, ingestion
+from . import auth, graph, projects, ingestion
 
-__all__ = ["auth", "projects", "ingestion"]
+__all__ = ["auth", "graph", "projects", "ingestion"]

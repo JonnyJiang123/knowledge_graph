@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 revision = "20260212_ingestion"
-down_revision = None
+down_revision = "20260211_core_tables"
 branch_labels = None
 depends_on = None
 
@@ -19,7 +19,7 @@ def upgrade() -> None:
     op.create_table(
         "data_sources",
         sa.Column("id", sa.String(length=36), primary_key=True),
-        sa.Column("project_id", sa.String(length=36), sa.ForeignKey("projects.id")),
+        sa.Column("project_id", sa.String(length=36), nullable=False),
         sa.Column("name", sa.String(length=100), nullable=False),
         sa.Column("type", sa.String(length=20), nullable=False),
         sa.Column("config", sa.JSON(), nullable=False),
@@ -43,8 +43,8 @@ def upgrade() -> None:
     op.create_table(
         "upload_artifacts",
         sa.Column("id", sa.String(length=36), primary_key=True),
-        sa.Column("project_id", sa.String(length=36), sa.ForeignKey("projects.id")),
-        sa.Column("source_id", sa.String(length=36), sa.ForeignKey("data_sources.id"), nullable=True),
+        sa.Column("project_id", sa.String(length=36), nullable=False),
+        sa.Column("source_id", sa.String(length=36), nullable=True),
         sa.Column("file_format", sa.String(length=10), nullable=False),
         sa.Column("stored_path", sa.String(length=255), nullable=False),
         sa.Column("original_filename", sa.String(length=255), nullable=False),
@@ -64,7 +64,7 @@ def upgrade() -> None:
     op.create_table(
         "cleaning_rules",
         sa.Column("id", sa.String(length=36), primary_key=True),
-        sa.Column("project_id", sa.String(length=36), sa.ForeignKey("projects.id")),
+        sa.Column("project_id", sa.String(length=36), nullable=False),
         sa.Column("name", sa.String(length=100), nullable=False),
         sa.Column("target_field", sa.String(length=100), nullable=False),
         sa.Column("rule_type", sa.String(length=20), nullable=False),
@@ -77,9 +77,9 @@ def upgrade() -> None:
     op.create_table(
         "ingestion_jobs",
         sa.Column("id", sa.String(length=36), primary_key=True),
-        sa.Column("project_id", sa.String(length=36), sa.ForeignKey("projects.id")),
-        sa.Column("artifact_id", sa.String(length=36), sa.ForeignKey("upload_artifacts.id")),
-        sa.Column("source_id", sa.String(length=36), sa.ForeignKey("data_sources.id"), nullable=True),
+        sa.Column("project_id", sa.String(length=36), nullable=False),
+        sa.Column("artifact_id", sa.String(length=36), nullable=False),
+        sa.Column("source_id", sa.String(length=36), nullable=True),
         sa.Column("mode", sa.String(length=10), nullable=False),
         sa.Column("status", sa.String(length=20), nullable=False),
         sa.Column("total_rows", sa.Integer(), nullable=False),

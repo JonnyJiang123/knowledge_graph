@@ -26,7 +26,8 @@
       "Bash(node --version:*)",
       "Bash(npm:*)",
       "Bash(git stash:*)",
-      "Bash(git merge:*)"
+      "Bash(git merge:*)",
+      "Bash(python -m pytest:*)"
     ]
   }
 }

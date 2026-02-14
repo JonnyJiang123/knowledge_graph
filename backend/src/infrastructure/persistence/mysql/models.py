@@ -69,6 +69,24 @@ class ProjectModel(Base):
     )
 
 
+class GraphProjectModel(Base):
+    __tablename__ = "graph_projects"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=generate_uuid)
+    name: Mapped[str] = mapped_column(String(150), index=True)
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    industry: Mapped[str] = mapped_column(String(20))
+    status: Mapped[str] = mapped_column(String(20), nullable=False, server_default="ACTIVE")
+    owner_id: Mapped[str] = mapped_column(String(36), ForeignKey("users.id"), index=True)
+    metadata_json: Mapped[Optional[dict]] = mapped_column(JSON, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, server_default=func.now(), onupdate=func.now()
+    )
+
+    owner: Mapped["UserModel"] = relationship()
+
+
 class DataSourceModel(Base):
     __tablename__ = "data_sources"
 
