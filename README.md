@@ -15,6 +15,7 @@ A full-stack knowledge graph workbench for finance and healthcare teams. It inge
 
 ## Backend Highlights
 - `backend/src/application/services/ingestion_service.py` orchestrates uploads, profiling, cleaning rule evaluation, and MySQL imports. It delegates to Celery when work exceeds the thresholds described in [2026-02-11-phase2-ingestion.md](docs/plans/2026-02-11-phase2-ingestion.md).
+- `backend/src/application/services/graph_service.py` stitches the MySQL graph-project repository together with the Neo4j entity/relation repository. Use the `/api/graph/projects` routes (see `backend/src/api/routers/graph.py`) to create graph projects, merge entities/relations, and fetch neighbor slices via the GraphEntityRepository.
 - Domain entities (`DataSource`, `IngestionJob`, cleaning rules) live under `backend/src/domain/`. Ports describe repositories, storage, preview cache, and task queues to keep adapters swappable.
 - Persistence adapters use SQLAlchemy models for `data_sources`, `upload_artifacts`, `cleaning_rules`, and `ingestion_jobs`, with Fernet-encrypted connector secrets.
 - Celery worker command (used both locally and in Docker):

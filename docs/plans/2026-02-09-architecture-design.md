@@ -17,6 +17,13 @@
 | Databases | Neo4j 5.x (graph) + MySQL 8.0 (relational) |
 | Testing | Unit (domain) + Integration (testcontainers) + E2E |
 
+## 2026-02-14 Backend Foundation Status
+
+- ? Domain entities (`GraphProject`, `Entity`, `Relation`) plus the graph ports are implemented under `backend/src/domain/` with unit coverage in `tests/unit/domain/test_graph_domain.py`.
+- ? Persistence adapters now include MySQL graph projects (`backend/src/infrastructure/persistence/mysql/repositories/graph_project_repository.py`) and Neo4j entity/relation storage (`backend/src/infrastructure/persistence/neo4j/graph_repository.py`).
+- ? `GraphService` (`backend/src/application/services/graph_service.py`) and the `/api/graph/projects` routes expose project creation, entity/relation merge, and neighbor queries; integration coverage lives in `tests/integration/api/test_graph_routes.py`.
+- ? Full backend verification runs via `pytest tests/unit -v` and `pytest tests/integration -v` (requires MySQL + Neo4j + Redis running as described below).
+
 ## 1. High-Level Structure
 
 ```

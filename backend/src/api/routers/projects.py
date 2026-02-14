@@ -4,20 +4,31 @@ from uuid import uuid4
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.domain.entities.user import User
+from src.api.dependencies.auth import get_current_user
+from src.api.dependencies.graph import get_graph_service
+from src.api.schemas.project import (
+    GraphProjectCreate,
+    GraphProjectListResponse,
+    GraphProjectResponse,
+    ProjectCreate,
+    ProjectListResponse,
+    ProjectResponse,
+    ProjectUpdate,
+)
+from src.application.commands.create_graph_project import CreateGraphProjectCommand
+from src.application.services.graph_service import (
+    GraphProjectAccessError,
+    GraphProjectNotFoundError,
+    GraphService,
+)
 from src.domain.entities.project import Project
+from src.domain.entities.user import User
 from src.infrastructure.persistence.mysql.database import get_db
 from src.infrastructure.persistence.mysql.project_repository import MySQLProjectRepository
-from src.api.schemas.project import (
-    ProjectCreate,
-    ProjectUpdate,
-    ProjectResponse,
-    ProjectListResponse,
-)
-from src.api.dependencies.auth import get_current_user
 
 
 router = APIRouter(prefix="/api/projects", tags=["projects"])
+graph_router = APIRouter(prefix="/api/graph/projects", tags=["graph-projects"])
 
 
 @router.post("", response_model=ProjectResponse, status_code=status.HTTP_201_CREATED)
@@ -138,3 +149,54 @@ async def delete_project(
         )
 
     await project_repo.delete(project_id)
+
+
+@graph_router.post(
+    "",
+    response_model=GraphProjectResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def create_graph_project(
+    payload: GraphProjectCreate,
+    current_user: Annotated[User, Depends(get_current_user)],
+    service: Annotated[GraphService, Depends(get_graph_service)],
+):
+    command = CreateGraphProjectCommand(
+        name=payload.name,
+        owner_id=current_user.id,
+        industry=payload.industry,
+        description=payload.description,
+        metadata=payload.metadata,
+    )
+    project = await service.create_project(command)
+    return project
+
+
+@graph_router.get("", response_model=GraphProjectListResponse)
+async def list_graph_projects(
+    current_user: Annotated[User, Depends(get_current_user)],
+    service: Annotated[GraphService, Depends(get_graph_service)],
+):
+    projects = await service.list_projects(current_user.id)
+    return GraphProjectListResponse(items=projects, total=len(projects))
+
+
+@graph_router.get("/{project_id}", response_model=GraphProjectResponse)
+async def get_graph_project(
+    project_id: str,
+    current_user: Annotated[User, Depends(get_current_user)],
+    service: Annotated[GraphService, Depends(get_graph_service)],
+):
+    try:
+        project = await service.get_project(project_id, current_user.id)
+    except GraphProjectNotFoundError:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Graph project not found",
+        ) from None
+    except GraphProjectAccessError:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to access this graph project",
+        ) from None
+    return project

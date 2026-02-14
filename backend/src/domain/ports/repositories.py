@@ -4,7 +4,10 @@ from abc import ABC, abstractmethod
 from typing import Any, Optional
 
 from src.domain.entities.data_source import DataSource
+from src.domain.entities.entity import Entity
+from src.domain.entities.graph_project import GraphProject
 from src.domain.entities.ingestion_job import IngestionJob
+from src.domain.entities.relation import Relation
 from src.domain.entities.project import Project
 from src.domain.entities.user import User
 from src.domain.value_objects.ingestion import FileArtifact, JobStatus
@@ -96,3 +99,34 @@ class PreviewCachePort(ABC):
 class TaskQueuePort(ABC):
     @abstractmethod
     async def enqueue(self, task_name: str, payload: dict[str, Any]) -> str: ...
+
+
+class GraphProjectRepository(ABC):
+    @abstractmethod
+    async def create(self, project: GraphProject) -> GraphProject: ...
+
+    @abstractmethod
+    async def get(self, project_id: str) -> Optional[GraphProject]: ...
+
+    @abstractmethod
+    async def list_by_owner(self, owner_id: str) -> list[GraphProject]: ...
+
+    @abstractmethod
+    async def update_status(self, project_id: str, status: str) -> None: ...
+
+
+class GraphEntityRepository(ABC):
+    @abstractmethod
+    async def merge_entity(self, entity: Entity) -> Entity: ...
+
+    @abstractmethod
+    async def merge_relation(self, relation: Relation) -> Relation: ...
+
+    @abstractmethod
+    async def delete_entity(self, project_id: str, entity_id: str) -> None: ...
+
+    @abstractmethod
+    async def delete_relation(self, project_id: str, relation_id: str) -> None: ...
+
+    @abstractmethod
+    async def find_neighbors(self, project_id: str, entity_id: str, depth: int = 1) -> dict[str, list[Any]]: ...
