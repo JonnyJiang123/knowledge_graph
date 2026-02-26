@@ -86,3 +86,69 @@ export interface NeighborRun {
   result: NeighborResponse
   createdAt: string
 }
+
+// ==================== 查询与可视化类型 ====================
+
+export interface GraphData {
+  nodes: GraphNode[]
+  edges: GraphEdge[]
+  categories: string[]
+}
+
+export interface GraphNode {
+  id: string
+  name: string
+  category: number
+  symbolSize: number
+  value: Record<string, any>
+  x?: number
+  y?: number
+}
+
+export interface GraphEdge {
+  source: string
+  target: string
+  relation: string
+  value?: number
+}
+
+export interface SearchParams {
+  keyword: string
+  entityTypes?: string[]
+  limit?: number
+  offset?: number
+}
+
+export interface PathParams {
+  startId: string
+  endId: string
+  maxDepth?: number
+  findAll?: boolean
+}
+
+export interface SearchEntity {
+  id: string
+  name: string
+  type: string
+  labels: string[]
+  properties: Record<string, any>
+  score?: number
+}
+
+export interface PathResult {
+  nodes: PathNode[]
+  edges: PathEdge[]
+  length: number
+}
+
+export interface PathNode {
+  id: string
+  name: string
+  type: string
+}
+
+export interface PathEdge {
+  source: string
+  target: string
+  relation: string
+}

@@ -7,7 +7,13 @@ import type {
   GraphRelationPayload,
   NeighborQueryParams,
   NeighborResponse,
+  SearchParams,
+  PathParams,
+  SearchEntity,
+  PathResult,
+  GraphData,
 } from '@/types/graph'
+import type { CentralityAnalysisResponse } from '@/types/visualization'
 
 const BASE_URL = '/graph/projects'
 
@@ -47,5 +53,45 @@ export async function fetchNeighbors(
       limit: params.limit,
     },
   })
+  return data
+}
+
+// ==================== 查询与可视化 API ====================
+
+export async function searchEntities(params: SearchParams): Promise<SearchEntity[]> {
+  const { data } = await client.get<SearchEntity[]>('/graph/search', {
+    params: {
+      q: params.keyword,
+      types: params.entityTypes?.join(','),
+      limit: params.limit ?? 20,
+      offset: params.offset ?? 0,
+    },
+  })
+  return data
+}
+
+export async function findPaths(params: PathParams): Promise<PathResult[]> {
+  const { data } = await client.post<PathResult[]>('/graph/paths', {
+    start_id: params.startId,
+    end_id: params.endId,
+    max_depth: params.maxDepth ?? 5,
+    find_all: params.findAll ?? false,
+  })
+  return data
+}
+
+export async function getVisualizationData(projectId: string): Promise<GraphData> {
+  const { data } = await client.get<GraphData>(`${BASE_URL}/${projectId}/visualization`)
+  return data
+}
+
+export async function runCentralityAnalysis(
+  projectId: string,
+  algorithm: 'pagerank' | 'betweenness'
+): Promise<CentralityAnalysisResponse> {
+  const { data } = await client.post<CentralityAnalysisResponse>(
+    `${BASE_URL}/${projectId}/centrality`,
+    { algorithm }
+  )
   return data
 }
