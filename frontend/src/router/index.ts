@@ -44,6 +44,16 @@ const routes: RouteRecordRaw[] = [
         name: 'IngestionJobs',
         component: () => import('@/pages/ingestion/JobList.vue'),
       },
+      {
+        path: 'graph/builder',
+        name: 'GraphBuilder',
+        component: () => import('@/pages/graph/GraphBuilder.vue'),
+      },
+      {
+        path: 'graph/jobs',
+        name: 'GraphJobs',
+        component: () => import('@/pages/graph/GraphJobs.vue'),
+      },
     ],
   },
 ]

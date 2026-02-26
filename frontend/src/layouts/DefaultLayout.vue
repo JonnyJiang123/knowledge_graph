@@ -8,6 +8,8 @@ import {
   SwitchButton,
   Upload,
   List,
+  Connection,
+  Histogram,
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -53,6 +55,20 @@ function handleLogout() {
           <el-menu-item index="/ingestion/jobs">
             <el-icon><List /></el-icon>
             <span>任务列表</span>
+          </el-menu-item>
+        </el-sub-menu>
+        <el-sub-menu index="/graph">
+          <template #title>
+            <el-icon><Connection /></el-icon>
+            <span>Graph</span>
+          </template>
+          <el-menu-item index="/graph/builder">
+            <el-icon><Connection /></el-icon>
+            <span>Graph Builder</span>
+          </el-menu-item>
+          <el-menu-item index="/graph/jobs">
+            <el-icon><Histogram /></el-icon>
+            <span>Graph Jobs</span>
           </el-menu-item>
         </el-sub-menu>
         <el-menu-item index="/settings" v-if="authStore.isSuperuser">
