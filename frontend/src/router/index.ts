@@ -44,6 +44,37 @@ const routes: RouteRecordRaw[] = [
         name: 'IngestionJobs',
         component: () => import('@/pages/ingestion/JobList.vue'),
       },
+      {
+        path: 'graph/builder',
+        name: 'GraphBuilder',
+        component: () => import('@/pages/graph/GraphBuilder.vue'),
+      },
+      {
+        path: 'graph/jobs',
+        name: 'GraphJobs',
+        component: () => import('@/pages/graph/GraphJobs.vue'),
+      },
+      {
+        path: 'graph/visualization',
+        name: 'GraphVisualization',
+        component: () => import('@/pages/graph/GraphVisualization.vue'),
+      },
+      {
+        path: 'graph/visualization/:projectId',
+        name: 'ProjectVisualization',
+        component: () => import('@/pages/graph/GraphVisualization.vue'),
+      },
+      {
+        path: 'query',
+        name: 'QueryBuilder',
+        component: () => import('@/pages/query/QueryBuilder.vue'),
+      },
+      {
+        path: 'reasoning',
+        name: 'ReasoningManager',
+        component: () => import('@/pages/reasoning/ReasoningManager.vue'),
+        meta: { title: '规则管理', requiresAuth: true },
+      },
     ],
   },
 ]

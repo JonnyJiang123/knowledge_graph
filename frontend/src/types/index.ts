@@ -58,3 +58,7 @@ export interface ProjectListResponse {
 }
 
 export * from './ingestion'
+export * from './graph'
+export * from './query'
+export * from './visualization'
+export * from './extraction'

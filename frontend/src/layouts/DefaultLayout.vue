@@ -8,6 +8,12 @@ import {
   SwitchButton,
   Upload,
   List,
+  Connection,
+  Histogram,
+  DataAnalysis,
+  Share,
+  Search,
+  Cpu,
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -41,18 +47,55 @@ function handleLogout() {
           <el-icon><Folder /></el-icon>
           <span>项目管理</span>
         </el-menu-item>
+        <!-- 知识图谱菜单 -->
+        <el-sub-menu index="/graph">
+          <template #title>
+            <el-icon><Share /></el-icon>
+            <span>知识图谱</span>
+          </template>
+          <el-menu-item index="/graph/builder">
+            <el-icon><Connection /></el-icon>
+            <span>图谱构建</span>
+          </el-menu-item>
+          <el-menu-item index="/graph/visualization">
+            <el-icon><DataAnalysis /></el-icon>
+            <span>图谱可视化</span>
+          </el-menu-item>
+          <el-menu-item index="/query">
+            <el-icon><Search /></el-icon>
+            <span>图谱查询</span>
+          </el-menu-item>
+        </el-sub-menu>
+
+        <!-- 推理分析菜单 -->
+        <el-sub-menu index="/reasoning">
+          <template #title>
+            <el-icon><Cpu /></el-icon>
+            <span>推理分析</span>
+          </template>
+          <el-menu-item index="/reasoning">
+            <el-icon><Setting /></el-icon>
+            <span>规则管理</span>
+          </el-menu-item>
+        </el-sub-menu>
+
+        <!-- 数据管理菜单 -->
         <el-sub-menu index="/ingestion">
           <template #title>
             <el-icon><Upload /></el-icon>
-            <span>数据导入</span>
+            <span>数据管理</span>
           </template>
           <el-menu-item index="/ingestion/wizard">
             <el-icon><Upload /></el-icon>
-            <span>导入向导</span>
+            <span>数据摄取</span>
           </el-menu-item>
           <el-menu-item index="/ingestion/jobs">
             <el-icon><List /></el-icon>
             <span>任务列表</span>
+          </el-menu-item>
+          <el-menu-item index="/graph/jobs">
+            <el-icon><Histogram /></el-icon>
+            <span>图谱任务</span>
           </el-menu-item>
         </el-sub-menu>
         <el-menu-item index="/settings" v-if="authStore.isSuperuser">

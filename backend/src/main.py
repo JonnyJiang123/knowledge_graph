@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.routers import auth, graph, projects, ingestion
+from src.api.routers import entities, relations, query, visualization, extraction
 from src.config import settings
 from src.infrastructure.persistence.neo4j.client import Neo4jClient
 
@@ -19,10 +20,20 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title=settings.app_name,
-    version="0.1.0",
+    version="0.2.0",
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan,
+    description="""
+    Knowledge Graph Platform API
+    
+    ## Features
+    - Graph project management
+    - Entity and relation CRUD
+    - Advanced query and visualization
+    - Knowledge extraction pipeline
+    - Graph algorithms (PageRank, Betweenness, Community Detection)
+    """
 )
 
 app.add_middleware(
@@ -33,14 +44,39 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 璺敱娉ㄥ唽
+# 路由注册
 app.include_router(auth.router)
 app.include_router(projects.router)
 app.include_router(projects.graph_router)
 app.include_router(graph.router)
 app.include_router(ingestion.router)
 
+# Phase 2: Query & Visualization Routes
+app.include_router(entities.router)
+app.include_router(relations.router)
+app.include_router(query.router)
+app.include_router(visualization.router)
+app.include_router(extraction.router)
+
 
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy"}
+    return {
+        "status": "healthy",
+        "version": "0.2.0",
+        "features": [
+            "graph_management",
+            "query",
+            "visualization",
+            "extraction"
+        ]
+    }
+
+
+@app.get("/")
+async def root():
+    return {
+        "message": "Knowledge Graph Platform API",
+        "version": "0.2.0",
+        "docs": "/docs"
+    }

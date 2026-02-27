@@ -3,14 +3,14 @@
 A full-stack knowledge graph workbench for finance and healthcare teams. It ingests messy files or MySQL tables, cleans and profiles data, runs NLP/graph reasoning, and surfaces insights through a Vue 3 UI.
 
 ## Product Overview
-- Built for mid-market financial + healthcare orgs that need low-cost graph intelligence tooling (see [ÖªÊ¶Í¼Æ×prd.md](ÖªÊ¶Í¼Æ×prd.md) for the full PRD in Chinese).
+- Built for mid-market financial + healthcare orgs that need low-cost graph intelligence tooling (see [ÖªÊ¶Í¼ï¿½ï¿½prd.md](ÖªÊ¶Í¼ï¿½ï¿½prd.md) for the full PRD in Chinese).
 - Focuses on rapid multi-source ingestion, configurable cleaning, graph modeling, and visualization without large engineering teams.
 - Ships opinionated artifacts for liquidity/risk (finance) and symptom/drug reasoning (healthcare) while staying extensible for other industries.
 
 ## System Architecture
 - **Hexagonal backend** (FastAPI + SQLAlchemy) keeps domain logic isolated from infrastructure. Ports cover repositories, storage, queue, and preview cache as outlined in [2026-02-09-architecture-design.md](docs/plans/2026-02-09-architecture-design.md).
 - **Dual data stores**: MySQL holds projects, ingestion metadata, cleaning rules, and file manifests; Neo4j 5.x stores the final knowledge graph. Redis powers both Celery and preview caching.
-- **Hybrid processing**: The ingestion service inspects payload size/row counts to decide between sync (¡Ü5 MB or ¡Ü10k rows) and async (Celery) paths. Async jobs reuse the Redis broker/result backend defined in `docker/docker-compose.yml`.
+- **Hybrid processing**: The ingestion service inspects payload size/row counts to decide between sync (ï¿½ï¿½5 MB or ï¿½ï¿½10k rows) and async (Celery) paths. Async jobs reuse the Redis broker/result backend defined in `docker/docker-compose.yml`.
 - **Frontend**: Vue 3 + Vite + Pinia + Element Plus deliver the ingestion wizard, project dashboards, and graph visualization (details in the same architecture doc).
 
 ## Backend Highlights
@@ -26,14 +26,14 @@ A full-stack knowledge graph workbench for finance and healthcare teams. It inge
 
 ### Required Environment Variables
 Set these in `backend/.env` or `docker/.env` before running services:
-- `MYSQL_URI` ¨C e.g. `mysql+asyncmy://knowledge_graph:<password>@127.0.0.1:2881/knowledge_graph`
-- `NEO4J_URI` ¨C e.g. `neo4j://localhost:7687`
-- `NEO4J_USER` / `NEO4J_PASSWORD` ¨C defaults to `neo4j` / `12345678` in local dev
-- `REDIS_URI` ¨C default `redis://localhost:6379/0`
-- `UPLOAD_BASE_DIR`, `TMP_DIR`, `PREVIEW_ROW_LIMIT`, `ENCRYPTION_KEY` ¨C see `backend/src/config.py` and `.env.example` for defaults (generate Fernet keys with `python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"`).
+- `MYSQL_URI` ï¿½C e.g. `mysql+asyncmy://knowledge_graph:<password>@127.0.0.1:2881/knowledge_graph`
+- `NEO4J_URI` ï¿½C e.g. `neo4j://localhost:7687`
+- `NEO4J_USER` / `NEO4J_PASSWORD` ï¿½C defaults to `neo4j` / `12345678` in local dev
+- `REDIS_URI` ï¿½C default `redis://localhost:6379/0`
+- `UPLOAD_BASE_DIR`, `TMP_DIR`, `PREVIEW_ROW_LIMIT`, `ENCRYPTION_KEY` ï¿½C see `backend/src/config.py` and `.env.example` for defaults (generate Fernet keys with `python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"`).
 
 ## Frontend Experience
-- Vue 3 wizard guides users through **source selection ¡ú field mapping ¡ú cleaning rules ¡ú preview ¡ú submission**.
+- Vue 3 wizard guides users through **source selection ï¿½ï¿½ field mapping ï¿½ï¿½ cleaning rules ï¿½ï¿½ preview ï¿½ï¿½ submission**.
 - Pinia stores coordinate API calls, job polling, and Element Plus stepper state; components live in `frontend/src/components/ingestion/`.
 - Vitest + Vue Test Utils cover wizard logic; run `npm run test:unit` inside `frontend/`.
 
@@ -64,16 +64,47 @@ Set these in `backend/.env` or `docker/.env` before running services:
    celery -A src.infrastructure.queue.celery_app.celery_app worker -Q ingestion -l info
    cd ../frontend; npm run dev
    ```
-4. **Populate sample data** ¨C configure `.env` with the MySQL/Neo4j credentials above, then use the ingestion wizard to upload sample CSVs or run MySQL imports.
+4. **Populate sample data** ï¿½C configure `.env` with the MySQL/Neo4j credentials above, then use the ingestion wizard to upload sample CSVs or run MySQL imports.
+
+## Graph Builder Flows
+The graph module provides a two-page workflow for building and exploring knowledge graphs:
+
+### Graph Builder (`/graph/builder`)
+A guided wizard for creating graph projects, entities, and relations:
+1. **Project** â€“ Select an existing graph project or create a new one
+2. **Entities** â€“ Draft nodes (external_id, type, labels, properties) to persist; saved entities can be referenced in relations
+3. **Relations** â€“ Connect saved entities by specifying source_id, target_id, type, and properties
+4. **Review** â€“ Submit all drafts via batch persistence; the store returns a summary of entities and relations created
+
+The wizard uses `persistGraphDrafts()` from the Pinia graph store to batch-save all pending drafts atomically.
+
+### Graph Jobs (`/graph/jobs`)
+Run neighbor queries and review recent results:
+1. Select a project and provide an **Entity ID** as the traversal root
+2. Configure **Depth** (1-3) and optional **Limit** for result cap
+3. Click **Run neighbors** to execute the query; results are stored in local history
+4. Review runs in the table; click **Details** to open a drawer with entities/relations
+5. Click **Replay** to re-run a previous query with the same parameters
+
+History is persisted to localStorage (last 20 runs) and includes request metadata (projectId, depth, limit, timestamp).
+
+### Frontend Development Workflow
+- Run `npm run dev` in the `frontend/` directory
+- Navigate to `/graph/builder` to create project/entity/relation
+- Navigate to `/graph/jobs` to list neighbors and replay queries
+- Run tests: `cd frontend && npm run test:unit`
 
 ## Testing
 - Backend unit tests: `cd backend && pytest tests/unit -v`
 - Backend integration tests (requires Docker services): `cd backend && pytest tests/integration -v`
 - Celery task unit tests (eager mode): `cd backend && pytest tests/unit/queue/test_ingestion_task.py -v`
 - Frontend tests: `cd frontend && npm run test:unit`
+- Graph store tests: `cd frontend && npm run test:unit -- stores/__tests__/graph.spec.ts`
+- Graph builder page tests: `cd frontend && npm run test:unit -- pages/graph/__tests__/graphBuilder.spec.ts`
+- Graph jobs page tests: `cd frontend && npm run test:unit -- pages/graph/__tests__/graphJobs.spec.ts`
 
 ## Documentation Map
-- Product brief / personas: [ÖªÊ¶Í¼Æ×prd.md](ÖªÊ¶Í¼Æ×prd.md)
+- Product brief / personas: [ÖªÊ¶Í¼ï¿½ï¿½prd.md](ÖªÊ¶Í¼ï¿½ï¿½prd.md)
 - Platform architecture: [2026-02-09-architecture-design.md](docs/plans/2026-02-09-architecture-design.md)
 - Phase 1 backend delivery notes: [2026-02-09-phase1-implementation.md](docs/plans/2026-02-09-phase1-implementation.md)
 - Ingestion slice details: [2026-02-11-phase2-ingestion.md](docs/plans/2026-02-11-phase2-ingestion.md)
