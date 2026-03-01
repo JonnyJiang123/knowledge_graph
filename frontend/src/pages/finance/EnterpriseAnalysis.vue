@@ -95,8 +95,8 @@ const handleNodeClick = (node: any) => {
   router.push(`/finance/enterprises/${node.id}`)
 }
 
-const getRiskType = (level: string) => {
-  const map: Record<string, string> = {
+const getRiskType = (level: string): "info" | "warning" | "danger" | "primary" | "success" | undefined => {
+  const map: Record<string, "info" | "warning" | "danger" | "primary" | "success"> = {
     'LOW': 'success',
     'MEDIUM': 'warning',
     'HIGH': 'danger'

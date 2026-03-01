@@ -17,11 +17,7 @@ export class FileStorage {
     }
   }
 
-  public async saveFile(
-    file: Buffer,
-    fileName: string,
-    projectId: string
-  ): Promise<string> {
+  public async saveFile(file: Buffer, fileName: string, projectId: string): Promise<string> {
     const projectDir = path.join(this.baseDir, `proj-${projectId}`, 'clean');
     this.ensureDir(projectDir);
 

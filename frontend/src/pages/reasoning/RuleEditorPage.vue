@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import RuleEditor from '@/components/reasoning/RuleEditor.vue'
@@ -35,7 +35,7 @@ async function handleSave(params: CreateRuleParams | UpdateRuleParams) {
       await reasoningStore.updateRule(ruleId.value, params as UpdateRuleParams)
       ElMessage.success('规则已更新')
     } else {
-      await reasoningStore.createRule(params as CreateRuleParams)
+      await reasoningStore.createRule(graphStore.currentProjectId, params as CreateRuleParams)
       ElMessage.success('规则已创建')
     }
     router.push('/reasoning/rules')

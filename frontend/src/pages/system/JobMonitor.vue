@@ -75,8 +75,8 @@ const jobStats = ref([
   { label: '今日失败', value: 2, change: '+1', type: 'danger' as const }
 ])
 
-const getStatusType = (status: string) => {
-  const map: Record<string, string> = {
+const getStatusType = (status: string): "info" | "warning" | "danger" | "primary" | "success" | undefined => {
+  const map: Record<string, "info" | "warning" | "danger" | "primary" | "success"> = {
     'pending': 'info',
     'running': 'warning',
     'completed': 'success',

@@ -12,7 +12,7 @@ const emit = defineEmits<{
 }>()
 
 function getLevelTag(level: AlertLevel) {
-  const tags: Record<AlertLevel, { type: string; text: string }> = {
+  const tags: Record<AlertLevel, { type: "info" | "warning" | "danger" | "primary" | "success"; text: string }> = {
     LOW: { type: 'info', text: '低' },
     MEDIUM: { type: 'warning', text: '中' },
     HIGH: { type: 'danger', text: '高' },

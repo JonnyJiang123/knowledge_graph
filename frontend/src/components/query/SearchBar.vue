@@ -50,13 +50,13 @@ function handleHistoryClick(record: SearchRecord) {
   })
 }
 
-function clearInput() {
-  emit('update:modelValue', '')
-  showHistory.value = (props.history?.length ?? 0) > 0
-}
+// function clearInput() {
+//   emit('update:modelValue', '')
+//   showHistory.value = (props.history?.length ?? 0) > 0
+// }
 
-function handleKeyDown(event: KeyboardEvent) {
-  if (event.key === 'Enter') {
+function handleKeyDown(event: Event | KeyboardEvent) {
+  if ('key' in event && event.key === 'Enter') {
     handleSearch()
   }
 }

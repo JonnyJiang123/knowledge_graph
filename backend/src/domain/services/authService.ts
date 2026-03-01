@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User, UserCreate, UserResponse, TokenResponse } from '../entities/user';
+import { UserCreate, UserResponse, TokenResponse } from '../entities/user';
 import { UserModel } from '../../infrastructure/persistence/mysql/models/user';
 import { settings } from '../../config';
 

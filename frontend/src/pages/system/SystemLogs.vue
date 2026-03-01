@@ -111,8 +111,8 @@ const stats = ref({
   byService: { api: 600, ingestion: 400, extraction: 300, query: 200 }
 })
 
-const getLevelType = (level: string) => {
-  const map: Record<string, string> = {
+const getLevelType = (level: string): "info" | "warning" | "danger" | "primary" | "success" | undefined => {
+  const map: Record<string, "info" | "warning" | "danger" | "primary" | "success"> = {
     'DEBUG': 'info',
     'INFO': 'success',
     'WARNING': 'warning',

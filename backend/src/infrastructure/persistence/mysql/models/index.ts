@@ -14,7 +14,4 @@ GraphProjectModel.belongsTo(UserModel, {
   as: 'owner',
 });
 
-export {
-  UserModel,
-  GraphProjectModel,
-};
+export { UserModel, GraphProjectModel };

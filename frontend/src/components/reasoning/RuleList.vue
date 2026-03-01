@@ -29,15 +29,15 @@ function getRuleTypeLabel(type: RuleType): string {
   return labels[type] ?? type
 }
 
-function getRuleTypeTag(type: RuleType) {
-  const tags: Record<RuleType, string> = {
+function getRuleTypeTag(type: RuleType): "info" | "warning" | "danger" | "primary" | "success" | undefined {
+  const tags: Record<RuleType, "info" | "warning" | "danger" | "primary" | "success" | undefined> = {
     FINANCE_FRAUD: 'danger',
     FINANCE_RISK: 'warning',
     HEALTHCARE_DRUG: 'success',
     HEALTHCARE_DIAGNOSIS: 'info',
-    CUSTOM: '',
+    CUSTOM: undefined,
   }
-  return tags[type] ?? ''
+  return tags[type]
 }
 
 function getStatusTag(isActive: boolean) {
@@ -110,7 +110,7 @@ function formatDate(dateStr: string): string {
             <el-switch
               :model-value="row.isActive"
               size="small"
-              @change="emit('toggle', row, $event)"
+              @change="emit('toggle', row, $event as boolean)"
             />
             <el-button
               link

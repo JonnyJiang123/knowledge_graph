@@ -79,8 +79,8 @@ const props = defineProps<{
   }
 }>()
 
-const getSeverityType = (severity: string) => {
-  const map: Record<string, string> = {
+const getSeverityType = (severity: string): "info" | "warning" | "danger" | "primary" | "success" | undefined => {
+  const map: Record<string, "info" | "warning" | "danger" | "primary" | "success"> = {
     'HIGH': 'danger',
     'MEDIUM': 'warning',
     'LOW': 'success'

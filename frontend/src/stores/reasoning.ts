@@ -41,11 +41,11 @@ export const useReasoningStore = defineStore('reasoning', () => {
     }
   }
 
-  async function createRule(params: CreateRuleParams) {
+  async function createRule(projectId: string, params: CreateRuleParams) {
     loading.save = true
     lastError.value = null
     try {
-      const rule = await reasoningApi.createRule(params)
+      const rule = await reasoningApi.createRule(projectId, params)
       rules.value = [rule, ...rules.value]
       return rule
     } catch (error) {
@@ -88,11 +88,11 @@ export const useReasoningStore = defineStore('reasoning', () => {
     }
   }
 
-  async function runReasoning(ruleId: string) {
+  async function runReasoning(projectId: string, ruleId: string) {
     loading.run = true
     lastError.value = null
     try {
-      const job = await reasoningApi.runReasoning(ruleId)
+      const job = await reasoningApi.runReasoning(projectId, ruleId)
       currentJob.value = job
       return job
     } catch (error) {

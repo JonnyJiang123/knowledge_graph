@@ -8,7 +8,7 @@ export class Neo4jClient {
     try {
       this.driver = neo4j.driver(
         settings.neo4jUri,
-        neo4j.auth.basic(settings.neo4jUser, settings.neo4jPassword)
+        neo4j.auth.basic(settings.neo4jUser, settings.neo4jPassword),
       );
 
       // Verify connection

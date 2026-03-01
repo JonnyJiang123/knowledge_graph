@@ -116,7 +116,7 @@ export const useGraphStore = defineStore('graph', () => {
     try {
       const response = await graphApi.fetchGraphProjects()
       projects.value = response.items
-      if (!currentProjectId.value && response.items.length) {
+      if (!currentProjectId.value && response.items.length > 0 && response.items[0]) {
         currentProjectId.value = response.items[0].id
       }
       return response.items

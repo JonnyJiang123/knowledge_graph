@@ -33,7 +33,7 @@ const fieldOptions = [
 
 function addCondition() {
   const newCondition: Condition = {
-    field: fieldOptions[0].value,
+    field: fieldOptions.length > 0 && fieldOptions[0] ? fieldOptions[0].value : 'entity.type',
     operator: 'equals',
     value: '',
   }
@@ -50,8 +50,10 @@ function removeCondition(index: number) {
 
 function updateCondition(index: number, field: keyof Condition, value: any) {
   const newConditions = [...props.conditions]
-  newConditions[index] = { ...newConditions[index], [field]: value }
-  emit('update:conditions', newConditions)
+  if (newConditions[index]) {
+    newConditions[index] = { ...newConditions[index], [field]: value }
+    emit('update:conditions', newConditions)
+  }
 }
 
 function getValuePlaceholder(operator: Operator): string {

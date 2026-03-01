@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from 'fastify';
 import { authenticate } from '../middlewares/authMiddleware';
 
-const entityRoutes: FastifyPluginAsync = async (fastify) => {
+const entityRoutes: FastifyPluginAsync = async fastify => {
   // Apply auth middleware to all routes
   fastify.addHook('preHandler', authenticate);
 

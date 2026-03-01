@@ -139,9 +139,9 @@ async function handleSave() {
   })
 }
 
-function getActionTypeLabel(type: ActionType): string {
-  return actionTypeOptions.find((opt) => opt.value === type)?.label ?? type
-}
+// function getActionTypeLabel(type: ActionType): string {
+//   return actionTypeOptions.find((opt) => opt.value === type)?.label ?? type
+// }
 </script>
 
 <template>
@@ -165,7 +165,7 @@ function getActionTypeLabel(type: ActionType): string {
         <el-input
           v-model="form.description"
           type="textarea"
-          rows="2"
+          :rows="2"
           placeholder="输入规则描述"
         />
       </el-form-item>

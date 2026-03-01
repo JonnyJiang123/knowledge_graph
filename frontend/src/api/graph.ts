@@ -84,7 +84,7 @@ export async function getVisualizationData(projectId: string): Promise<GraphData
   const { data } = await client.get<GraphData>('/visualization/graph', {
     params: { project_id: projectId }
   })
-  return data.data
+  return data
 }
 
 export async function runCentralityAnalysis(

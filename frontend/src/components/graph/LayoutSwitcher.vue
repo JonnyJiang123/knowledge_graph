@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Aim, Rank, CircleCheck, Grid } from '@element-plus/icons-vue'
+import { Aim, Rank, CircleCheck } from '@element-plus/icons-vue'
 import type { LayoutMode } from '@/types/visualization'
 
 const props = defineProps<{

@@ -4,10 +4,10 @@ import * as graphApi from '@/api/graph'
 import type {
   LayoutMode,
   GraphFilters,
-  GraphData,
   FetchOptions,
   CentralityResult,
-} from '@/types/visualization'
+  GraphData as VisualizationGraphData,
+} from '@/types'
 import type { GraphNode } from '@/types/graph'
 
 export const useVisualizationStore = defineStore('visualization', () => {
@@ -19,7 +19,7 @@ export const useVisualizationStore = defineStore('visualization', () => {
   })
   const zoomLevel = ref(1)
   const selectedNodes = ref<string[]>([])
-  const graphData = ref<GraphData | null>(null)
+  const graphData = ref<VisualizationGraphData | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
   const centralityResults = ref<CentralityResult[]>([])
@@ -30,7 +30,7 @@ export const useVisualizationStore = defineStore('visualization', () => {
     return graphData.value.nodes.filter(node => {
       if (filters.value.entityTypes.length > 0) {
         const category = graphData.value!.categories[node.category]
-        if (!filters.value.entityTypes.includes(category)) {
+        if (category && !filters.value.entityTypes.includes(category)) {
           return false
         }
       }
@@ -92,7 +92,7 @@ export const useVisualizationStore = defineStore('visualization', () => {
     error.value = null
     try {
       const data = await graphApi.getVisualizationData(projectId)
-      graphData.value = data
+      graphData.value = data as unknown as VisualizationGraphData
       if (options?.layout) {
         layoutMode.value = options.layout
       }

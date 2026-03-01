@@ -3,10 +3,7 @@ import { AuthService } from '../../domain/services/authService';
 
 const authService = new AuthService();
 
-export async function authenticate(
-  request: FastifyRequest,
-  reply: FastifyReply
-) {
+export async function authenticate(request: FastifyRequest, reply: FastifyReply) {
   try {
     const authHeader = request.headers.authorization;
 

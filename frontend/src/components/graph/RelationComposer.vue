@@ -72,7 +72,7 @@ function handleFieldChange(id: string, field: keyof GraphRelationDraft, value: u
               <el-input
                 type="textarea"
                 :model-value="JSON.stringify(draft.properties ?? {}, null, 2)"
-                rows="4"
+                :rows="4"
                 @change="(value: string) => {
                   try {
                     handleFieldChange(draft.id, 'properties', JSON.parse(value || '{}'))

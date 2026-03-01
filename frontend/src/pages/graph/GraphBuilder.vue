@@ -30,12 +30,12 @@ const previewGraphData = computed<GraphData>(() => {
   // 从实体草稿生成节点
   const nodes = graphStore.entityDrafts
     .filter((draft) => draft.external_id && draft.status === 'saved')
-    .map((draft, index) => ({
+    .map((draft) => ({
       id: draft.external_id,
       name: draft.external_id,
       category: getCategoryIndex(draft.type),
       symbolSize: 50,
-      value: 1,
+      value: {},
     }))
 
   // 从关系草稿生成边
@@ -54,7 +54,7 @@ const previewGraphData = computed<GraphData>(() => {
   return {
     nodes,
     edges,
-    categories: types.length > 0 ? types : ['实体'],
+    categories: types.length > 0 ? types.map(type => ({ name: type })) : [{ name: '实体' }],
   }
 })
 
@@ -103,7 +103,6 @@ const canProceed = computed(() => {
   return true
 })
 
-const isLastStep = computed(() => activeStep.value === 4)
 const isReviewStep = computed(() => activeStep.value === 3)
 const isPreviewStep = computed(() => activeStep.value === 4)
 

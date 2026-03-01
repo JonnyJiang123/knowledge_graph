@@ -1,15 +1,21 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Neo4jClient } from '../../infrastructure/persistence/neo4j/client';
-import { GraphEntity, GraphEntityCreate, GraphEntityResponse, GraphRelation, GraphRelationCreate, GraphRelationResponse, NeighborResponse } from '../entities/graph';
+import {
+  GraphEntityCreate,
+  GraphEntityResponse,
+  GraphRelationCreate,
+  GraphRelationResponse,
+  NeighborResponse,
+} from '../entities/graph';
 
 export class GraphService {
   public async createEntity(
     projectId: string,
     entityData: GraphEntityCreate,
-    ownerId: string
+    _ownerId: string,
   ): Promise<GraphEntityResponse> {
     const entityId = uuidv4();
-    
+
     const query = `
       MERGE (p:Project {id: $projectId})
       CREATE (e:Entity {
@@ -36,7 +42,7 @@ export class GraphService {
     };
 
     const result = await Neo4jClient.executeQuery(query, params);
-    
+
     if (result.length === 0) {
       throw new Error('Failed to create entity');
     }
@@ -48,10 +54,10 @@ export class GraphService {
   public async createRelation(
     projectId: string,
     relationData: GraphRelationCreate,
-    ownerId: string
+    _ownerId: string,
   ): Promise<GraphRelationResponse> {
     const relationId = uuidv4();
-    
+
     const query = `
       MATCH (p:Project {id: $projectId})
       MATCH (source:Entity {id: $sourceId, projectId: $projectId})
@@ -77,7 +83,7 @@ export class GraphService {
     };
 
     const result = await Neo4jClient.executeQuery(query, params);
-    
+
     if (result.length === 0) {
       throw new Error('Failed to create relation');
     }
@@ -90,7 +96,7 @@ export class GraphService {
     projectId: string,
     entityId: string,
     depth: number = 1,
-    limit?: number
+    limit?: number,
   ): Promise<NeighborResponse> {
     const query = `
       MATCH (p:Project {id: $projectId})
@@ -109,13 +115,18 @@ export class GraphService {
     };
 
     const result = await Neo4jClient.executeQuery(query, params);
-    
+
     if (result.length === 0) {
       return { entities: [], relations: [] };
     }
 
-    const entities = result[0].get('entities').map((entity: any) => this.mapToEntityResponse(entity.properties));
-    const relations = result[0].get('allRelations').flat().map((relation: any) => this.mapToRelationResponse(relation.properties));
+    const entities = result[0]
+      .get('entities')
+      .map((entity: any) => this.mapToEntityResponse(entity.properties));
+    const relations = result[0]
+      .get('allRelations')
+      .flat()
+      .map((relation: any) => this.mapToRelationResponse(relation.properties));
 
     return { entities, relations };
   }

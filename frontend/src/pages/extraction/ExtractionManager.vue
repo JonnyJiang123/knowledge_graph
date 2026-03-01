@@ -123,8 +123,8 @@ const dataSources = ref([
 
 const extractionJobs = ref<any[]>([])
 
-const getStatusType = (status: string) => {
-  const map: Record<string, string> = {
+const getStatusType = (status: string): "info" | "warning" | "danger" | "primary" | "success" | undefined => {
+  const map: Record<string, "info" | "warning" | "danger" | "primary" | "success"> = {
     'pending': 'info',
     'running': 'warning',
     'completed': 'success',
@@ -163,7 +163,7 @@ const startExtraction = async () => {
     }
 
     // 开始轮询
-    const { status } = useJobPolling(currentJobId.value, {
+    useJobPolling(currentJobId.value, {
       onComplete: (result) => {
         ElMessage.success('抽取完成')
         currentJob.value = result

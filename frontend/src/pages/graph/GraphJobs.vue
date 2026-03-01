@@ -67,7 +67,7 @@ async function replayRun(run: NeighborRun) {
   form.projectId = run.projectId
   form.entityId = run.entityId
   form.depth = run.depth
-  form.limit = run.limit
+  form.limit = run.limit || undefined
   // Execute the neighbor query
   await runNeighbors()
 }

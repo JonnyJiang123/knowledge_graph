@@ -46,13 +46,13 @@ function resetFilters() {
   emit('reset')
 }
 
-function updateEntityTypes(types: string[]) {
-  localFilters.value.entityTypes = types
-}
+// function updateEntityTypes(types: string[]) {
+//   localFilters.value.entityTypes = types
+// }
 
-function updateRelationTypes(types: string[]) {
-  localFilters.value.relationTypes = types
-}
+// function updateRelationTypes(types: string[]) {
+//   localFilters.value.relationTypes = types
+// }
 
 const activeFilterCount = computed(() => {
   let count = 0

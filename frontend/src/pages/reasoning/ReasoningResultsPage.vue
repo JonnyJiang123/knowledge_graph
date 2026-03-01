@@ -77,7 +77,9 @@ async function handleReRun() {
       }
     )
 
-    const job = await reasoningStore.runReasoning(ruleId.value)
+    // 假设项目ID为默认值，实际项目中应该从路由或状态中获取
+    const projectId = 'default'
+    const job = await reasoningStore.runReasoning(projectId, ruleId.value)
     ElMessage.success('新的推理任务已启动')
     router.replace(`/reasoning/results/${job.jobId}`)
   } catch (error) {

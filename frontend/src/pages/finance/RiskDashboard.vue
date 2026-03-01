@@ -69,7 +69,7 @@ import RiskScoreCard from '@/components/industry/finance/RiskScoreCard.vue'
 
 const router = useRouter()
 
-const riskMetrics = ref([
+const riskMetrics = ref<Array<{ title: string; score: number; level: 'LOW' | 'MEDIUM' | 'HIGH'; trend: 'up' | 'down' | undefined }>>([
   { title: '整体风险指数', score: 72, level: 'MEDIUM', trend: 'down' },
   { title: '欺诈检测率', score: 85, level: 'LOW', trend: 'up' },
   { title: '关联风险企业', score: 156, level: 'HIGH', trend: 'up' },

@@ -138,8 +138,8 @@ const removeDrug = (id: string) => {
   selectedDrugs.value = selectedDrugs.value.filter(drugId => drugId !== id)
 }
 
-const getSeverityType = (severity: string) => {
-  const map: Record<string, string> = {
+const getSeverityType = (severity: string): "info" | "warning" | "danger" | "primary" | "success" | undefined => {
+  const map: Record<string, "info" | "warning" | "danger" | "primary" | "success"> = {
     'HIGH': 'danger',
     'MEDIUM': 'warning',
     'LOW': 'info'

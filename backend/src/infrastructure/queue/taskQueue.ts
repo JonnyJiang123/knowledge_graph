@@ -1,5 +1,5 @@
-import Bull, { Job, JobId } from 'bull';
 import { settings } from '../../config';
+import Bull from 'bull';
 
 // Create task queues
 const ingestionQueue = new Bull('ingestion', settings.redisUri);
@@ -25,7 +25,7 @@ export interface BackupTask {
 }
 
 // Task processors
-ingestionQueue.process(async (job) => {
+ingestionQueue.process(async (job: Bull.Job) => {
   try {
     const task = job.data as IngestionTask;
     console.log(`Processing ingestion task for project ${task.projectId}`);
@@ -39,7 +39,7 @@ ingestionQueue.process(async (job) => {
   }
 });
 
-extractionQueue.process(async (job) => {
+extractionQueue.process(async (job: Bull.Job) => {
   try {
     const task = job.data as ExtractionTask;
     console.log(`Processing extraction task for document ${task.documentId}`);
@@ -53,7 +53,7 @@ extractionQueue.process(async (job) => {
   }
 });
 
-backupQueue.process(async (job) => {
+backupQueue.process(async (job: Bull.Job) => {
   try {
     const task = job.data as BackupTask;
     console.log(`Processing backup task for project ${task.projectId}`);
@@ -85,7 +85,7 @@ export class TaskQueueService {
   }
 
   public async getTaskStatus(queueName: string, taskId: string): Promise<any> {
-    let queue: Bull.Queue;
+    let queue: ReturnType<typeof Bull>;
     switch (queueName) {
       case 'ingestion':
         queue = ingestionQueue;
@@ -116,7 +116,7 @@ export class TaskQueueService {
   }
 
   public async cancelTask(queueName: string, taskId: string): Promise<boolean> {
-    let queue: Bull.Queue;
+    let queue: ReturnType<typeof Bull>;
     switch (queueName) {
       case 'ingestion':
         queue = ingestionQueue;

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { InfoFilled, Position, Search, Link } from '@element-plus/icons-vue'
+import { InfoFilled, Position, Link } from '@element-plus/icons-vue'
 import type { GraphNode } from '@/types/graph'
 
 const props = defineProps<{

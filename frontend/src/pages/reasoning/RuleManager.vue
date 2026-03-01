@@ -69,7 +69,7 @@ async function handleDelete(rule: any) {
 
 async function handleRun(rule: any) {
   try {
-    const job = await reasoningStore.runReasoning(rule.id)
+    const job = await reasoningStore.runReasoning(graphStore.currentProjectId, rule.id)
     ElMessage.success('推理任务已启动')
     router.push(`/reasoning/results/${job.jobId}`)
   } catch (error) {

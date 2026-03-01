@@ -57,8 +57,17 @@ export interface ProjectListResponse {
   total: number
 }
 
+// 基础类型
 export * from './ingestion'
-export * from './graph'
-export * from './query'
-export * from './visualization'
 export * from './extraction'
+
+// 图相关类型
+export * from './graph'
+
+// 查询相关类型
+// 注意：避免与graph.ts中的类型冲突
+export type { SearchRecord, SavedQuery, QueryResult, NLQueryResponse } from './query'
+
+// 可视化相关类型
+// 注意：避免与graph.ts中的类型冲突
+export type { LayoutMode, GraphFilters, FetchOptions, CentralityResult, CentralityAnalysisResponse, GraphStats } from './visualization'

@@ -1,10 +1,10 @@
-import { GraphProject, GraphProjectCreate, GraphProjectResponse } from '../entities/graph';
+import { GraphProjectCreate, GraphProjectResponse } from '../entities/graph';
 import { GraphProjectModel } from '../../infrastructure/persistence/mysql/models/graphProject';
 
 export class ProjectService {
   public async createProject(
     projectData: GraphProjectCreate,
-    ownerId: string
+    ownerId: string,
   ): Promise<GraphProjectResponse> {
     const project = await GraphProjectModel.create({
       name: projectData.name,
@@ -37,7 +37,7 @@ export class ProjectService {
   public async updateProject(
     projectId: string,
     projectData: Partial<GraphProjectCreate>,
-    ownerId: string
+    ownerId: string,
   ): Promise<GraphProjectResponse | null> {
     const project = await GraphProjectModel.findOne({
       where: { id: projectId, owner_id: ownerId },

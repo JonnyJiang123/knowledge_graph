@@ -47,15 +47,15 @@ const levelOptions: { value: AlertLevel | 'all'; label: string }[] = [
   { value: 'LOW', label: '低' },
 ]
 
-function getStatusTag(status: string) {
-  const tags: Record<string, string> = {
-    pending: 'info',
-    running: 'warning',
-    completed: 'success',
-    failed: 'danger',
-  }
-  return tags[status] ?? 'info'
-}
+// function getStatusTag(status: string) {
+//   const tags: Record<string, string> = {
+//     pending: 'info',
+//     running: 'warning',
+//     completed: 'success',
+//     failed: 'danger',
+//   }
+//   return tags[status] ?? 'info'
+// }
 
 function getStatusLabel(status: string) {
   const labels: Record<string, string> = {

@@ -58,8 +58,8 @@ const props = defineProps<{
   error?: string
 }>()
 
-const statusType = computed(() => {
-  const map: Record<string, string> = {
+const statusType = computed((): "info" | "warning" | "danger" | "primary" | "success" | undefined => {
+  const map: Record<string, "info" | "warning" | "danger" | "primary" | "success"> = {
     'pending': 'info',
     'running': 'warning',
     'completed': 'success',

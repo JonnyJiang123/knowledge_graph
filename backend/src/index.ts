@@ -105,12 +105,7 @@ app.get('/health', async () => {
   return {
     status: 'healthy',
     version: '0.2.0',
-    features: [
-      'graph_management',
-      'query',
-      'visualization',
-      'extraction',
-    ],
+    features: ['graph_management', 'query', 'visualization', 'extraction'],
   };
 });
 
@@ -126,25 +121,25 @@ app.get('/', async () => {
 // Lifecycle hooks
 app.addHook('onReady', async () => {
   try {
-      await Neo4jClient.connect();
-      app.log.info('Neo4j connected successfully');
-    } catch (error) {
-      app.log.error(`Failed to connect to Neo4j: ${error}`);
-    }
+    await Neo4jClient.connect();
+    app.log.info('Neo4j connected successfully');
+  } catch (error) {
+    app.log.error(`Failed to connect to Neo4j: ${error}`);
+  }
 
-    try {
-      RedisClient.connect();
-      app.log.info('Redis connected successfully');
-    } catch (error) {
-      app.log.error(`Failed to connect to Redis: ${error}`);
-    }
+  try {
+    RedisClient.connect();
+    app.log.info('Redis connected successfully');
+  } catch (error) {
+    app.log.error(`Failed to connect to Redis: ${error}`);
+  }
 
-    try {
-      await testConnection();
-      app.log.info('MySQL connected successfully');
-    } catch (error) {
-      app.log.error(`Failed to connect to MySQL: ${error}`);
-    }
+  try {
+    await testConnection();
+    app.log.info('MySQL connected successfully');
+  } catch (error) {
+    app.log.error(`Failed to connect to MySQL: ${error}`);
+  }
 });
 
 app.addHook('onClose', async () => {
@@ -165,7 +160,7 @@ app.addHook('onClose', async () => {
 
 // Start server
 const PORT = process.env.PORT || 8000;
-app.listen({ port: parseInt(PORT as string), host: '0.0.0.0' }, (err) => {
+app.listen({ port: parseInt(PORT as string), host: '0.0.0.0' }, err => {
   if (err) {
     app.log.error(err);
     process.exit(1);

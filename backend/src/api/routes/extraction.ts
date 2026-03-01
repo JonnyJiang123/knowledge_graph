@@ -1,7 +1,7 @@
 import { FastifyPluginAsync } from 'fastify';
 import { authenticate } from '../middlewares/authMiddleware';
 
-const extractionRoutes: FastifyPluginAsync = async (fastify) => {
+const extractionRoutes: FastifyPluginAsync = async fastify => {
   // Apply auth middleware to all routes
   fastify.addHook('preHandler', authenticate);
 

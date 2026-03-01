@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Document, ArrowUp, ArrowDown } from '@element-plus/icons-vue'
+import { ArrowUp, ArrowDown } from '@element-plus/icons-vue'
 import type { SearchEntity, PathResult } from '@/types/query'
 
 type SortField = 'relevance' | 'name' | 'type'

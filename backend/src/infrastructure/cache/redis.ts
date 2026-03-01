@@ -7,11 +7,11 @@ export class RedisClient {
   public static connect(): void {
     try {
       this.client = new Redis(settings.redisUri);
-      
-      this.client.on('error', (error) => {
+
+      this.client.on('error', error => {
         console.error('Redis error:', error);
       });
-      
+
       this.client.on('connect', () => {
         console.log('Redis connection established');
       });
@@ -39,7 +39,7 @@ export class RedisClient {
   public static async set(key: string, value: any, expire?: number): Promise<void> {
     const client = this.getClient();
     const stringValue = typeof value === 'object' ? JSON.stringify(value) : value;
-    
+
     if (expire) {
       await client.set(key, stringValue, 'EX', expire);
     } else {
@@ -50,9 +50,9 @@ export class RedisClient {
   public static async get(key: string): Promise<any> {
     const client = this.getClient();
     const value = await client.get(key);
-    
+
     if (!value) return null;
-    
+
     try {
       return JSON.parse(value);
     } catch {

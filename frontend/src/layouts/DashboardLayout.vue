@@ -120,7 +120,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 
 const userName = computed(() => authStore.user?.username || '用户')
-const userAvatar = computed(() => authStore.user?.avatar || '')
+const userAvatar = computed(() => (authStore.user as any)?.avatar || '')
 const unreadCount = computed(() => 5)
 
 const logout = () => {

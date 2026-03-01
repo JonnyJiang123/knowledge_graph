@@ -4,7 +4,7 @@
       <div class="title">{{ title }}</div>
       <div class="score" :class="scoreClass">{{ score }}</div>
       <div class="level">
-        <el-tag :type="{levelType}" size="small">{{ levelText }}</el-tag>
+        <el-tag :type="levelType" size="small">{{ levelText }}</el-tag>
       </div>
       <div v-if="trend" class="trend">
         <el-icon :class="trend">
@@ -33,8 +33,8 @@ const scoreClass = computed(() => {
   return 'low'
 })
 
-const levelType = computed(() => {
-  const map: Record<string, string> = {
+const levelType = computed((): "info" | "warning" | "danger" | "primary" | "success" | undefined => {
+  const map: Record<string, "info" | "warning" | "danger" | "primary" | "success"> = {
     'LOW': 'success',
     'MEDIUM': 'warning',
     'HIGH': 'danger'

@@ -38,12 +38,7 @@ onMounted(() => {
 })
 
 async function handleEntitySearch(params: SearchParams) {
-  if (!currentProjectId.value) {
-    // 如果没有项目ID，直接使用原来的方法（向后兼容）
-    await queryStore.searchEntities(params)
-    return
-  }
-  // 使用新的 API 方法，传入 projectId
+  // 总是传入 projectId，即使为空
   await queryStore.searchEntities(currentProjectId.value, params)
 }
 
@@ -90,7 +85,7 @@ async function confirmSaveQuery() {
     params = { query: nlQuery.value }
   }
 
-  await queryStore.saveQuery(saveQueryName.value, params, activeTab.value)
+  await queryStore.saveQuery(saveQueryName.value, params)
   showSaveDialog.value = false
 }
 

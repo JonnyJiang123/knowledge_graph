@@ -7,9 +7,7 @@ import type {
   SearchParams,
   PathParams,
   QueryResult,
-  SearchEntity,
-  PathResult,
-} from '@/types/query'
+} from '@/types'
 
 const STORAGE_KEY = 'kg_search_history'
 const MAX_HISTORY = 20

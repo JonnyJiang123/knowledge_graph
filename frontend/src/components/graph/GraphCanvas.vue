@@ -3,7 +3,7 @@ import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import * as echarts from 'echarts'
 import type { ECharts, EChartsOption } from 'echarts'
 import type { GraphData, LayoutMode } from '@/types/visualization'
-import type { GraphNode, GraphEdge } from '@/types/graph'
+// import type { GraphNode, GraphEdge } from '@/types/graph'
 
 const props = defineProps<{
   data: GraphData
@@ -51,7 +51,7 @@ function initChart() {
   chartInstance.on('finished', () => {
     if (chartInstance) {
       const option = chartInstance.getOption()
-      if (option.series && option.series[0]?.zoom) {
+      if (option.series && Array.isArray(option.series) && option.series[0]?.zoom) {
         emit('update:zoomLevel', option.series[0].zoom)
       }
     }
@@ -210,7 +210,7 @@ function getCategoryColor(index: number): string {
     '#9a60b4',
     '#ea7ccc',
   ]
-  return colors[index % colors.length]
+  return colors && index !== undefined ? (colors[index % colors.length] || '#909399') : '#909399'
 }
 
 // 更新图表

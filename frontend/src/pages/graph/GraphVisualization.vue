@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { FullScreen, Download, ZoomIn, ZoomOut, Refresh, Rank } from '@element-plus/icons-vue'
+import { FullScreen, Download, ZoomIn, ZoomOut, Refresh, Rank, TopRight, BottomLeft } from '@element-plus/icons-vue'
 import { useVisualizationStore } from '@/stores/visualization'
 import { useQueryStore } from '@/stores/query'
 import GraphCanvas from '@/components/graph/GraphCanvas.vue'
@@ -80,7 +80,7 @@ function handleTooltipAction(action: string, nodeId: string) {
       // 设置路径终点
       break
     case 'find-neighbors':
-      queryStore.searchEntities({ keyword: nodeId, limit: 10 })
+      queryStore.searchEntities(projectId.value, { keyword: nodeId, limit: 10 })
       break
   }
 }
@@ -113,11 +113,11 @@ const hoveredNode = computed(() => {
     <!-- 侧边栏过滤器 -->
     <aside v-show="showFilters" class="filter-sidebar">
       <FilterPanel
-        :data="vizStore.graphData"
-        v-model="vizStore.filters"
-        @apply="handleFilterApply"
-        @reset="handleFilterReset"
-      />
+          :data="vizStore.graphData || { nodes: [], edges: [], categories: [] }"
+          v-model="vizStore.filters"
+          @apply="handleFilterApply"
+          @reset="handleFilterReset"
+        />
     </aside>
 
     <!-- 主视图区域 -->
@@ -185,7 +185,11 @@ const hoveredNode = computed(() => {
       <div class="canvas-container">
         <GraphCanvas
           ref="graphCanvasRef"
-          :data="vizStore.graphData || { nodes: [], edges: [], categories: [] }"
+          :data="{
+            nodes: vizStore.graphData?.nodes || [],
+            edges: vizStore.graphData?.edges || [],
+            categories: vizStore.graphData?.categories?.map(cat => typeof cat === 'string' ? { name: cat } : cat) || []
+          }"
           :layout-mode="vizStore.layoutMode"
           :selected-nodes="vizStore.selectedNodes"
           :zoom-level="vizStore.zoomLevel"
@@ -199,7 +203,7 @@ const hoveredNode = computed(() => {
         <!-- 节点提示 -->
         <NodeTooltip
           :node="hoveredNode"
-          :categories="vizStore.graphData?.categories || []"
+          :categories="(vizStore.graphData?.categories || []).map((cat: any) => typeof cat === 'string' ? cat : cat.name)"
           :visible="showTooltip"
           :x="tooltipPosition.x"
           :y="tooltipPosition.y"
@@ -228,7 +232,15 @@ const hoveredNode = computed(() => {
             <div class="detail-row">
               <span class="detail-label">类型:</span>
               <el-tag size="small">
-                {{ vizStore.graphData?.categories[vizStore.selectedNodeDetails.node.category] }}
+                {{ 
+                  (() => {
+                    const categories = vizStore.graphData?.categories || [];
+                    const category = categories[vizStore.selectedNodeDetails.node.category] as any;
+                    return category 
+                      ? (typeof category === 'string' ? category : category.name)
+                      : '未知';
+                  })()
+                }}
               </el-tag>
             </div>
             <div class="detail-row">
@@ -260,7 +272,7 @@ const hoveredNode = computed(() => {
     <!-- 导出对话框 -->
     <ExportDialog
       v-model="showExportDialog"
-      :data="vizStore.graphData"
+      :data="vizStore.graphData || { nodes: [], edges: [], categories: [] }"
       :chart-instance="graphCanvasRef?.getInstance?.()"
     />
   </div>

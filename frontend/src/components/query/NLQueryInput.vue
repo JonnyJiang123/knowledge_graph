@@ -36,8 +36,8 @@ function handleExampleClick(example: string) {
   showExamples.value = false
 }
 
-function handleKeyDown(event: KeyboardEvent) {
-  if (event.key === 'Enter' && !event.shiftKey) {
+function handleKeyDown(event: Event | KeyboardEvent) {
+  if ('key' in event && event.key === 'Enter' && !('shiftKey' in event && event.shiftKey)) {
     event.preventDefault()
     handleSubmit()
   }
