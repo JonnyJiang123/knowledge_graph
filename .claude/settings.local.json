@@ -27,7 +27,13 @@
       "Bash(npm:*)",
       "Bash(git stash:*)",
       "Bash(git merge:*)",
-      "Bash(python -m pytest:*)"
+      "Bash(python -m pytest:*)",
+      "Bash(python -m py_compile src/domain/ports/nlp/tokenizer.py src/domain/ports/nlp/ner_extractor.py src/domain/ports/nlp/relation_extractor.py)",
+      "Bash(python -m py_compile src/api/routers/system/monitoring.py src/api/routers/system/logs.py src/api/routers/system/backup.py)",
+      "Bash(python -m py_compile src/api/routers/finance/association.py src/api/routers/finance/fraud.py src/api/routers/finance/risk.py)",
+      "Bash(python -m py_compile src/api/routers/healthcare/diagnosis.py src/api/routers/healthcare/drugs.py src/api/routers/healthcare/medical_records.py)",
+      "Bash(.venvScriptsactivate)",
+      "Bash(uvicorn src.main:app --reload --host 0.0.0.0 --port 8000)"
     ]
   }
 }

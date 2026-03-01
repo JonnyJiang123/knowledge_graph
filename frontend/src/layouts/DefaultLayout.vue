@@ -28,16 +28,18 @@ function handleLogout() {
 <template>
   <el-container class="layout-container">
     <!-- 侧边栏 -->
-    <el-aside width="200px" class="layout-aside">
+    <el-aside width="240px" class="layout-aside">
       <div class="logo">
         <h3>知识图谱</h3>
       </div>
       <el-menu
         :default-active="$route.path"
+        :default-openeds="['/graph', '/reasoning', '/ingestion']"
         router
         background-color="#001529"
         text-color="#fff"
         active-text-color="#409eff"
+        style="border-right: none;"
       >
         <el-menu-item index="/">
           <el-icon><House /></el-icon>

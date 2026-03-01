@@ -34,13 +34,13 @@ export const useQueryStore = defineStore('query', () => {
   const pathResults = computed(() => currentResults.value?.paths ?? [])
 
   // Actions
-  async function searchEntities(params: SearchParams) {
+  async function searchEntities(projectId: string, params: SearchParams) {
     loading.value = true
     error.value = null
     try {
-      const response = await queryApi.searchEntities(params)
+      const response = await queryApi.searchEntities(projectId, params)
       currentResults.value = {
-        entities: response.items,
+        entities: response.entities,
         total: response.total,
       }
       addToHistory({
@@ -49,7 +49,7 @@ export const useQueryStore = defineStore('query', () => {
       })
       return response
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Search failed'
+      error.value = err instanceof Error ? err.message : '搜索失败'
       throw err
     } finally {
       loading.value = false
@@ -66,12 +66,12 @@ export const useQueryStore = defineStore('query', () => {
         total: paths.length,
       }
       addToHistory({
-        query: `Path: ${params.startId} → ${params.endId}`,
+        query: `路径: ${params.startId} → ${params.endId}`,
         resultCount: paths.length,
       })
       return paths
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Path finding failed'
+      error.value = err instanceof Error ? err.message : '路径查找失败'
       throw err
     } finally {
       loading.value = false
@@ -94,7 +94,7 @@ export const useQueryStore = defineStore('query', () => {
       })
       return response
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'NL query failed'
+      error.value = err instanceof Error ? err.message : '自然语言查询失败'
       throw err
     } finally {
       loading.value = false
@@ -116,7 +116,7 @@ export const useQueryStore = defineStore('query', () => {
       savedQueries.value.push(saved)
       return saved
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Save query failed'
+      error.value = err instanceof Error ? err.message : '保存查询失败'
       throw err
     }
   }
@@ -127,7 +127,7 @@ export const useQueryStore = defineStore('query', () => {
       savedQueries.value = queries
       return queries
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Load saved queries failed'
+      error.value = err instanceof Error ? err.message : '加载保存的查询失败'
       throw err
     }
   }
@@ -137,7 +137,7 @@ export const useQueryStore = defineStore('query', () => {
       await queryApi.deleteSavedQuery(id)
       savedQueries.value = savedQueries.value.filter(q => q.id !== id)
     } catch (err) {
-      error.value = err instanceof Error ? err.message : 'Delete query failed'
+      error.value = err instanceof Error ? err.message : '删除查询失败'
       throw err
     }
   }

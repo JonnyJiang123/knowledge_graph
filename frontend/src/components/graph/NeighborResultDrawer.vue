@@ -16,53 +16,53 @@ const handleClose = () => emit('update:modelValue', false)
 <template>
   <el-drawer
     v-model="props.modelValue"
-    title="Neighbor result"
+    title="邻居查询结果"
     size="50%"
     @close="handleClose"
   >
     <template v-if="props.run">
       <el-descriptions :column="2" border>
-        <el-descriptions-item label="Entity ID">
+        <el-descriptions-item label="实体ID">
           {{ props.run.entityId }}
         </el-descriptions-item>
-        <el-descriptions-item label="Depth">
+        <el-descriptions-item label="深度">
           {{ props.run.depth }}
         </el-descriptions-item>
-        <el-descriptions-item label="Limit">
-          {{ props.run.limit ?? 'Unlimited' }}
+        <el-descriptions-item label="限制">
+          {{ props.run.limit ?? '无限制' }}
         </el-descriptions-item>
-        <el-descriptions-item label="Nodes">
+        <el-descriptions-item label="节点">
           {{ props.run.result.entities?.length ?? 0 }}
         </el-descriptions-item>
-        <el-descriptions-item label="Relations">
+        <el-descriptions-item label="关系">
           {{ props.run.result.relations?.length ?? 0 }}
         </el-descriptions-item>
-        <el-descriptions-item label="Timestamp">
+        <el-descriptions-item label="时间戳">
           {{ new Date(props.run.createdAt).toLocaleString() }}
         </el-descriptions-item>
       </el-descriptions>
 
       <section class="result-section">
-        <h4>Entities ({{ props.run.result.entities?.length ?? 0 }})</h4>
-        <el-empty v-if="!props.run.result.entities?.length" description="No entities found" />
+        <h4>实体 ({{ props.run.result.entities?.length ?? 0 }})</h4>
+        <el-empty v-if="!props.run.result.entities?.length" description="未找到实体" />
         <el-table v-else :data="props.run.result.entities" size="small" height="200">
           <el-table-column prop="id" label="ID" width="160" />
-          <el-table-column prop="type" label="Type" width="120" />
-          <el-table-column prop="labels" label="Labels" />
+          <el-table-column prop="type" label="类型" width="120" />
+          <el-table-column prop="labels" label="标签" />
         </el-table>
       </section>
       <section class="result-section">
-        <h4>Relations ({{ props.run.result.relations?.length ?? 0 }})</h4>
-        <el-empty v-if="!props.run.result.relations?.length" description="No relations found" />
+        <h4>关系 ({{ props.run.result.relations?.length ?? 0 }})</h4>
+        <el-empty v-if="!props.run.result.relations?.length" description="未找到关系" />
         <el-table v-else :data="props.run.result.relations" size="small" height="200">
           <el-table-column prop="id" label="ID" width="160" />
-          <el-table-column prop="type" label="Type" width="120" />
-          <el-table-column prop="source_id" label="Source" width="160" />
-          <el-table-column prop="target_id" label="Target" width="160" />
+          <el-table-column prop="type" label="类型" width="120" />
+          <el-table-column prop="source_id" label="源" width="160" />
+          <el-table-column prop="target_id" label="目标" width="160" />
         </el-table>
       </section>
     </template>
-    <el-empty v-else description="Select a neighbor run" />
+    <el-empty v-else description="选择邻居查询运行" />
   </el-drawer>
 </template>
 

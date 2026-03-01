@@ -21,29 +21,29 @@ function handleFieldChange(id: string, field: keyof GraphEntityDraft, value: unk
   <section class="entity-composer">
     <header class="entity-composer__header">
       <div>
-        <h3>Entities</h3>
-        <p class="hint">Define nodes you want to merge into the graph.</p>
+        <h3>实体</h3>
+        <p class="hint">定义要合并到图谱中的节点。</p>
       </div>
-      <el-button type="primary" @click="emit('add')">Add entity</el-button>
+      <el-button type="primary" @click="emit('add')">添加实体</el-button>
     </header>
 
-    <el-empty v-if="!drafts.length" description="No entities added yet" />
+    <el-empty v-if="!drafts.length" description="尚未添加实体" />
 
     <el-row v-else :gutter="12">
       <el-col v-for="draft in drafts" :key="draft.id" :xs="24" :md="12">
         <el-card class="entity-card" shadow="hover">
           <template #header>
             <div class="entity-card__header">
-              <span>{{ draft.external_id || 'New Entity' }}</span>
+              <span>{{ draft.external_id || '新实体' }}</span>
               <el-space>
-                <el-tag v-if="draft.status === 'saved'" type="success" size="small">saved</el-tag>
+                <el-tag v-if="draft.status === 'saved'" type="success" size="small">已保存</el-tag>
                 <el-button
                   link
                   type="primary"
                   size="small"
                   @click="emit('persist', draft.id)"
                 >
-                  Persist
+                  保存
                 </el-button>
                 <el-button
                   link
@@ -51,40 +51,40 @@ function handleFieldChange(id: string, field: keyof GraphEntityDraft, value: unk
                   size="small"
                   @click="emit('remove', draft.id)"
                 >
-                  Remove
+                  删除
                 </el-button>
               </el-space>
             </div>
           </template>
 
           <el-form label-width="120px" class="entity-form">
-            <el-form-item label="External ID">
+            <el-form-item label="外部ID">
               <el-input
                 :model-value="draft.external_id"
                 placeholder="company-123"
                 @input="handleFieldChange(draft.id, 'external_id', $event)"
               />
             </el-form-item>
-            <el-form-item label="Type">
+            <el-form-item label="类型">
               <el-input
                 :model-value="draft.type"
                 placeholder="ENTERPRISE"
                 @input="handleFieldChange(draft.id, 'type', $event)"
               />
             </el-form-item>
-            <el-form-item label="Labels">
+            <el-form-item label="标签">
               <el-select
                 :model-value="draft.labels"
                 multiple
-                placeholder="Add labels"
+                placeholder="添加标签"
                 @change="handleFieldChange(draft.id, 'labels', $event)"
               >
-                <el-option label="Enterprise" value="Enterprise" />
-                <el-option label="Account" value="Account" />
-                <el-option label="Person" value="Person" />
+                <el-option label="企业" value="Enterprise" />
+                <el-option label="账户" value="Account" />
+                <el-option label="个人" value="Person" />
               </el-select>
             </el-form-item>
-            <el-form-item label="Properties JSON">
+            <el-form-item label="属性 JSON">
               <el-input
                 type="textarea"
                 :model-value="JSON.stringify(draft.properties ?? {}, null, 2)"

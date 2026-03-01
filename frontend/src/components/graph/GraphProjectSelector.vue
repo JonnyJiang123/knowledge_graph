@@ -48,10 +48,10 @@ function submitForm() {
 <template>
   <section class="graph-project-selector">
     <el-form label-width="120px" class="project-form">
-      <el-form-item label="Graph Project">
+      <el-form-item label="图谱项目">
         <el-select
           v-model="props.modelValue"
-          placeholder="Select an existing project"
+          placeholder="选择现有项目"
           class="selector"
           :loading="props.loading"
           :disabled="!hasProjects"
@@ -65,30 +65,30 @@ function submitForm() {
           />
         </el-select>
         <el-button type="primary" @click="openDialog">
-          {{ hasProjects ? 'New graph project' : 'Create first graph project' }}
+          {{ hasProjects ? '新建图谱项目' : '创建首个图谱项目' }}
         </el-button>
       </el-form-item>
     </el-form>
 
-    <el-dialog v-model="dialogVisible" title="New Graph Project" width="480px">
+    <el-dialog v-model="dialogVisible" title="新建图谱项目" width="480px">
       <el-form label-width="120px">
-        <el-form-item label="Name">
-          <el-input v-model="form.name" placeholder="Knowledge Graph V1" />
+        <el-form-item label="名称">
+          <el-input v-model="form.name" placeholder="知识图谱 V1" />
         </el-form-item>
-        <el-form-item label="Industry">
+        <el-form-item label="行业">
           <el-select v-model="form.industry">
-            <el-option label="Finance" value="FINANCE" />
-            <el-option label="Healthcare" value="HEALTHCARE" />
+            <el-option label="金融" value="FINANCE" />
+            <el-option label="医疗" value="HEALTHCARE" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Description">
+        <el-form-item label="描述">
           <el-input v-model="form.description" type="textarea" rows="3" />
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" :disabled="!form.name" @click="submitForm">
-          Create
+          创建
         </el-button>
       </template>
     </el-dialog>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { ChatDotRound, Magic, ArrowRight } from '@element-plus/icons-vue'
+import { ChatDotRound, Star, ArrowRight } from '@element-plus/icons-vue'
 
 const props = defineProps<{
   modelValue: string
@@ -57,7 +57,7 @@ function handleKeyDown(event: KeyboardEvent) {
         size="small"
         @click="showExamples = !showExamples"
       >
-        <el-icon><Magic /></el-icon>
+        <el-icon><Star /></el-icon>
         示例查询
       </el-button>
     </div>

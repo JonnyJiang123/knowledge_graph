@@ -1,12 +1,15 @@
-FROM python:3.11-slim
+FROM node:18-alpine
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+WORKDIR /app
 
-WORKDIR /app/backend
+COPY package*.json ./
 
-COPY backend /app/backend
+RUN npm install --production
 
-RUN pip install --upgrade pip && pip install --no-cache-dir -e .
+COPY . .
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+RUN npm run build
+
+EXPOSE 8000
+
+CMD ["npm", "start"]

@@ -34,15 +34,15 @@ async function handleCreateProject(payload: GraphProjectCreatePayload) {
   try {
     await graphStore.saveProject(payload)
     form.projectId = graphStore.currentProjectId
-    ElMessage.success('Graph project created')
+    ElMessage.success('图谱项目创建成功')
   } catch (error) {
-    ElMessage.error(error instanceof Error ? error.message : 'Failed to create project')
+    ElMessage.error(error instanceof Error ? error.message : '创建项目失败')
   }
 }
 
 async function runNeighbors() {
   if (!form.projectId || !form.entityId) {
-    ElMessage.warning('Select a project and provide an entity ID')
+    ElMessage.warning('请选择项目并输入实体ID')
     return
   }
   try {
@@ -51,9 +51,9 @@ async function runNeighbors() {
       depth: form.depth,
       limit: form.limit,
     })
-    ElMessage.success('Neighbor query submitted')
+    ElMessage.success('邻居查询已提交')
   } catch (error) {
-    ElMessage.error(error instanceof Error ? error.message : 'Failed to fetch neighbors')
+    ElMessage.error(error instanceof Error ? error.message : '获取邻居失败')
   }
 }
 
@@ -79,8 +79,8 @@ async function replayRun(run: NeighborRun) {
       <template #header>
         <div class="jobs-header">
           <div>
-            <h2>Graph Jobs</h2>
-            <p class="hint">Run neighbor queries and review recent results.</p>
+            <h2>图谱任务</h2>
+            <p class="hint">运行邻居查询并查看最近的结果。</p>
           </div>
         </div>
       </template>
@@ -94,10 +94,10 @@ async function replayRun(run: NeighborRun) {
           @create="handleCreateProject"
         />
         <el-form label-width="140px" class="neighbor-form">
-          <el-form-item label="Entity ID">
-            <el-input v-model="form.entityId" placeholder="entity-uuid" data-test="entity-id-input" />
+          <el-form-item label="实体ID">
+            <el-input v-model="form.entityId" placeholder="实体UUID" data-test="entity-id-input" />
           </el-form-item>
-          <el-form-item label="Depth">
+          <el-form-item label="深度">
             <el-slider
               v-model="form.depth"
               :min="1"
@@ -106,7 +106,7 @@ async function replayRun(run: NeighborRun) {
               input-size="small"
             />
           </el-form-item>
-          <el-form-item label="Limit (optional)">
+          <el-form-item label="限制（可选）">
             <el-input-number v-model="form.limit" :min="1" :max="100" />
           </el-form-item>
           <el-form-item>
@@ -116,34 +116,34 @@ async function replayRun(run: NeighborRun) {
               data-test="run-neighbors"
               @click="runNeighbors"
             >
-              Run neighbors
+              运行邻居查询
             </el-button>
           </el-form-item>
         </el-form>
       </div>
 
       <el-table :data="graphStore.neighborRuns" stripe>
-        <el-table-column prop="entityId" label="Entity" width="200" />
-        <el-table-column prop="depth" label="Depth" width="100" />
+        <el-table-column prop="entityId" label="实体" width="200" />
+        <el-table-column prop="depth" label="深度" width="100" />
         <el-table-column
-          label="Nodes"
+          label="节点"
           width="100"
           :formatter="(_, __, row) => row?.result?.entities?.length ?? 0"
         />
         <el-table-column
-          label="Relations"
+          label="关系"
           width="120"
           :formatter="(_, __, row) => row?.result?.relations?.length ?? 0"
  />
         <el-table-column
           prop="createdAt"
-          label="Created"
+          label="创建时间"
           :formatter="(_, __, row) => new Date(row.createdAt).toLocaleString()"
         />
-        <el-table-column label="Action" width="200">
+        <el-table-column label="操作" width="200">
           <template #default="{ row }">
-            <el-button link type="primary" data-test="neighbor-row-details" @click="openResult(row)">Details</el-button>
-            <el-button link type="primary" data-test="neighbor-row-replay" @click="replayRun(row)">Replay</el-button>
+            <el-button link type="primary" data-test="neighbor-row-details" @click="openResult(row)">详情</el-button>
+            <el-button link type="primary" data-test="neighbor-row-replay" @click="replayRun(row)">重新运行</el-button>
           </template>
         </el-table-column>
       </el-table>

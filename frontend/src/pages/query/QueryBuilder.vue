@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { Search, Connection, ChatDotRound, Star, Delete } from '@element-plus/icons-vue'
 import { useQueryStore } from '@/stores/query'
+import { useProjectStore } from '@/stores/project'
 import SearchBar from '@/components/query/SearchBar.vue'
 import NLQueryInput from '@/components/query/NLQueryInput.vue'
 import PathFinder from '@/components/query/PathFinder.vue'
@@ -9,12 +10,16 @@ import ResultList from '@/components/query/ResultList.vue'
 import type { SearchParams, PathParams } from '@/types/query'
 
 const queryStore = useQueryStore()
+const projectStore = useProjectStore()
 
 const activeTab = ref<'entity' | 'path' | 'nl'>('entity')
 const searchKeyword = ref('')
 const nlQuery = ref('')
 const showSaveDialog = ref(false)
 const saveQueryName = ref('')
+
+// 当前项目ID
+const currentProjectId = computed(() => projectStore.currentProject?.id || '')
 
 // 模拟的实体选项（实际应该从后端获取）
 const entityOptions = ref([
@@ -28,11 +33,18 @@ const entityOptions = ref([
 const availableEntityTypes = ['公司', '人物', '产品', '地点', '事件']
 
 onMounted(() => {
+  projectStore.fetchProjects()
   queryStore.loadSavedQueries()
 })
 
 async function handleEntitySearch(params: SearchParams) {
-  await queryStore.searchEntities(params)
+  if (!currentProjectId.value) {
+    // 如果没有项目ID，直接使用原来的方法（向后兼容）
+    await queryStore.searchEntities(params)
+    return
+  }
+  // 使用新的 API 方法，传入 projectId
+  await queryStore.searchEntities(currentProjectId.value, params)
 }
 
 async function handlePathSearch(params: PathParams) {

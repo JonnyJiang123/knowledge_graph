@@ -72,7 +72,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'reasoning',
         name: 'ReasoningManager',
-        component: () => import('@/pages/reasoning/ReasoningManager.vue'),
+        component: () => import('@/pages/reasoning/RuleManager.vue'),
         meta: { title: '规则管理', requiresAuth: true },
       },
     ],

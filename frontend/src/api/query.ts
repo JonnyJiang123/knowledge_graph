@@ -8,17 +8,19 @@ import type {
   SavedQuery,
 } from '@/types/query'
 
-export async function searchEntities(params: SearchParams): Promise<{
-  items: SearchEntity[]
+export async function searchEntities(projectId: string, params: SearchParams): Promise<{
+  entities: SearchEntity[]
   total: number
+  offset: number
+  limit: number
+  has_more: boolean
 }> {
-  const { data } = await client.get('/query/search', {
-    params: {
-      q: params.keyword,
-      types: params.entityTypes?.join(','),
-      limit: params.limit ?? 20,
-      offset: params.offset ?? 0,
-    },
+  const { data } = await client.post('/query/search', {
+    project_id: projectId,
+    keyword: params.keyword,
+    entity_type: params.entityTypes?.[0],
+    limit: params.limit ?? 20,
+    offset: params.offset ?? 0,
   })
   return data
 }

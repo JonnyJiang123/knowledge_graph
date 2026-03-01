@@ -128,9 +128,9 @@ function prevStep() {
 async function handleCreateProject(payload: GraphProjectCreatePayload) {
   try {
     await graphStore.saveProject(payload)
-    ElMessage.success('Graph project created')
+    ElMessage.success('图谱项目创建成功')
   } catch (error) {
-    ElMessage.error(error instanceof Error ? error.message : 'Failed to create project')
+    ElMessage.error(error instanceof Error ? error.message : '创建项目失败')
   }
 }
 
@@ -167,8 +167,8 @@ async function submitGraph() {
       <template #header>
         <div class="builder-header">
           <div>
-            <h2>Graph Builder</h2>
-            <p class="hint">Create graph projects, entities, and relations in a guided flow.</p>
+            <h2>图谱构建</h2>
+            <p class="hint">在引导流程中创建图谱项目、实体和关系</p>
           </div>
         </div>
       </template>

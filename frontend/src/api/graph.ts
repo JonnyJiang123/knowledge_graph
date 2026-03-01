@@ -81,17 +81,21 @@ export async function findPaths(params: PathParams): Promise<PathResult[]> {
 }
 
 export async function getVisualizationData(projectId: string): Promise<GraphData> {
-  const { data } = await client.get<GraphData>(`${BASE_URL}/${projectId}/visualization`)
-  return data
+  const { data } = await client.get<GraphData>('/visualization/graph', {
+    params: { project_id: projectId }
+  })
+  return data.data
 }
 
 export async function runCentralityAnalysis(
   projectId: string,
-  algorithm: 'pagerank' | 'betweenness'
+  algorithm: 'pagerank' | 'betweenness' | 'degree'
 ): Promise<CentralityAnalysisResponse> {
-  const { data } = await client.post<CentralityAnalysisResponse>(
-    `${BASE_URL}/${projectId}/centrality`,
-    { algorithm }
-  )
+  const { data } = await client.get<CentralityAnalysisResponse>('/visualization/centrality', {
+    params: {
+      project_id: projectId,
+      algorithm
+    }
+  })
   return data
 }

@@ -21,27 +21,27 @@ function handleFieldChange(id: string, field: keyof GraphRelationDraft, value: u
   <section class="relation-composer">
     <header class="relation-composer__header">
       <div>
-        <h3>Relations</h3>
-        <p class="hint">Link saved entities by specifying relation type and endpoints.</p>
+        <h3>关系</h3>
+        <p class="hint">通过指定关系类型和端点来链接已保存的实体。</p>
       </div>
-      <el-button type="primary" @click="emit('add')">Add relation</el-button>
+      <el-button type="primary" @click="emit('add')">添加关系</el-button>
     </header>
 
-    <el-empty v-if="!drafts.length" description="No relations defined" />
+    <el-empty v-if="!drafts.length" description="尚未定义关系" />
 
     <el-row v-else :gutter="12">
       <el-col v-for="draft in drafts" :key="draft.id" :xs="24" :md="12">
         <el-card class="relation-card" shadow="hover">
           <template #header>
             <div class="relation-card__header">
-              <span>{{ draft.type || 'New Relation' }}</span>
+              <span>{{ draft.type || '新关系' }}</span>
               <el-space>
-                <el-tag v-if="draft.status === 'saved'" type="success" size="small">saved</el-tag>
+                <el-tag v-if="draft.status === 'saved'" type="success" size="small">已保存</el-tag>
                 <el-button link type="primary" size="small" @click="emit('persist', draft.id)">
-                  Persist
+                  保存
                 </el-button>
                 <el-button link type="danger" size="small" @click="emit('remove', draft.id)">
-                  Remove
+                  删除
                 </el-button>
               </el-space>
             </div>
